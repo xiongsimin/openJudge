@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/plugins/DataTables-1.10.16/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/plugins/DataTables-1.10.16/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="/plugins/layer/layer.js"></script>
+    <style>
+        #top {
+            width: 100%;
+            height: 50px;
+            ;
+            /* background-color: rgb(163, 250, 76); */
+            border-bottom: 1px solid #CCC;
+            padding-top: 0.6%;
+        }
+
+        #new-competition {
+            float: left;
+            margin-left: 20px;
+        }
+
+        #top select {
+            width: 100px;
+            float: left;
+            margin-left: 20px;
+        }
+
+        .small-icon {
+            width: 15px;
+            height: 15px;
+        }
+
+        #refresh {
+            width: 45px;
+            height: 38px;
+            float: right;
+            margin-right: 50px;
+            border: none;
+            background-color: white;
+        }
+
+        #refresh img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="top">
+        <button id="new-competition" class="btn btn-primary">新建比赛</button>
+        <select class="form-control" name="" id="">
+            <option value="">未发布</option>
+            <option value="">未开始</option>
+            <option value="">进行中</option>
+            <option value="">已结束</option>
+        </select>
+        <button id="refresh">
+            <a href="">
+                <img src="imgs/refresh.png" alt="">
+            </a>
+        </button>
+    </div>
+    <div style="width: 90%;text-align: center;margin-left: 5%;margin-top: 3%;">
+        <table id="myTable" class="display">
+            <thead>
+                <tr>
+                    <th>比赛名称</th>
+                    <th>创建人</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>第一届程序设计大赛</td>
+                    <td>xiongsimin</td>
+                    <td>2018/5/23 13:00</td>
+                    <td>2018/5/23 17:00</td>
+                    <td>
+                        <img class="small-icon" src="imgs/publish.png" alt="发布">
+                    </td>
+                </tr>
+                <tr>
+                    <td>第二届程序设计大赛</td>
+                    <td>xiongsimin</td>
+                    <td>2018/5/24 13:00</td>
+                    <td>2018/5/24 17:00</td>
+                    <td>
+                        <img class="small-icon" src="imgs/undercarriage.png" alt="下线">
+                    </td>
+                </tr>
+                <tr>
+                    <td>第三届程序设计大赛</td>
+                    <td>xiongsimin</td>
+                    <td>2018/5/25 13:00</td>
+                    <td>2018/5/25 17:00</td>
+                    <td>
+                        <img class="small-icon" src="imgs/delete.png" alt="删除">
+                    </td>
+                </tr>
+                <tr>
+                    <td>第四届程序设计大赛</td>
+                    <td>xiongsimin</td>
+                    <td>2018/5/26 13:00</td>
+                    <td>2018/5/26 17:00</td>
+                    <td>
+                        <img class="small-icon" src="imgs/check.png" alt="查看">
+                    </td>
+                </tr>
+                <tr>
+                    <td>第五届程序设计大赛</td>
+                    <td>xiongsimin</td>
+                    <td>2018/5/27 13:00</td>
+                    <td>2018/5/27 17:00</td>
+                    <td>
+                        <img class="small-icon" src="imgs/edit.png" alt="编辑">
+                    </td>
+                </tr>
+                <tr>
+                    <td>第六届程序设计大赛</td>
+                    <td>xiongsimin</td>
+                    <td>2018/5/28 13:00</td>
+                    <td>2018/5/28 17:00</td>
+                    <td>
+                        <img src="" alt="已结束">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    // "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfo": "显示第<span style='color:red;'> _START_ </span>至 <span style='color:red;'> _END_ </span>项结果，共 <span style='color:red;'> _TOTAL_ </span>项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                }
+            });
+            //弹出一个iframe层
+            $('#new-competition').on('click', function () {
+                layer.open({
+                    type: 2,
+                    title: '新建比赛',
+                    maxmin: true,
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['600px', '400px'],
+                    content: 'new_competition.html'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
