@@ -23,7 +23,7 @@
             padding-top: 0.6%;
         }
 
-        #new-competition {
+        #new-practice {
             float: left;
             margin-left: 20px;
         }
@@ -60,15 +60,11 @@
 
 <body>
     <div id="top">
-        <button id="new-competition" class="btn btn-primary">新建比赛</button>
+        <button id="new-practice" class="btn btn-primary">新建练习</button>
         <select class="form-control" name="state" id="state">
             <option value="0">未发布</option>
-            <a th:if="${state} eq '1'"><option selected="selected" value="1">未开始</option></a>
-            <a th:unless="${state} eq '1'"><option value="1">未开始</option></a>
-            <a th:if="${state} eq '2'"><option selected="selected" value="2">进行中</option></a>
-            <a th:unless="${state} eq '2'"><option value="2">进行中</option></a>
-            <a th:if="${state} eq '3'"><option selected="selected" value="3">已结束</option></a>
-            <a th:unless="${state} eq '3'"><option value="3">已结束</option></a>
+            <a th:if="${state} eq '1'"><option selected="selected" value="1">已发布</option></a>
+            <a th:unless="${state} eq '1'"><option value="1">已发布</option></a>
         </select>
         <button id="refresh">
             <a href="">
@@ -80,27 +76,22 @@
         <table id="myTable" class="display">
             <thead>
                 <tr>
-                    <th>比赛名称</th>
+                    <th>练习名称</th>
                     <th>创建人</th>
                     <th>创建时间</th>
-                    <th>开始时间</th>
-                    <th>结束时间</th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
-                <tr style="height:6%;" th:each="competition:${competitions}">
-                    <td th:text="${competition.title}"></td>
-                    <td th:text="${competition.handler_name}"></td>
-                    <td th:text="${#dates.format(competition.time,'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${#dates.format(competition.start_time,'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${#dates.format(competition.end_time,'yyyy-MM-dd HH:mm:ss')}"></td>
+                <tr style="height:6%;" th:each="practice:${practices}">
+                    <td th:text="${practice.title}"></td>
+                    <td th:text="${practice.handler_name}"></td>
+                    <td th:text="${#dates.format(practice.time,'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td>
-                    	<a th:if="${state} eq '0'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon edit" src="imgs/edit.png" alt="编辑"></a>
-                        <a th:if="${state} eq '0'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon publish" src="imgs/publish.png" alt="发布"></a>
-                        <a th:if="${state} eq '1'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线"></a>
-                        <a th:if="${state} eq '2'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线"></a>
-                        <img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon delete" src="imgs/delete.png" alt="删除">
+                    	<a th:if="${state} eq '0'"><img th:id="${practice.id}" th:practice_title="${practice.title}" th:state="${state}" class="small-icon edit" src="imgs/edit.png" alt="编辑"></a>
+                        <a th:if="${state} eq '0'"><img th:id="${practice.id}" th:practice_title="${practice.title}" th:state="${state}" class="small-icon publish" src="imgs/publish.png" alt="发布"></a>
+                        <a th:if="${state} eq '1'"><img th:id="${practice.id}" th:practice_title="${practice.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线"></a>
+                        <img th:id="${practice.id}" th:practice_title="${practice.title}" th:state="${state}" class="small-icon delete" src="imgs/delete.png" alt="删除">
                     </td>
                 </tr>
             </tbody>
@@ -136,15 +127,15 @@
                     }
                 }
             });
-            //新建比赛，弹出一个iframe层
-            $('#new-competition').on('click', function () {
+            //新建练习，弹出一个iframe层
+            $('#new-practice').on('click', function () {
                 layer.open({
                     type: 2,
-                    title: '新建比赛',
+                    title: '新建练习',
                     maxmin: false,
                     shadeClose: false, //点击遮罩关闭层
-                    area: ['600px', '400px'],
-                    content: '/sup_new_competition.html',
+                    area: ['600px', '250px'],
+                    content: '/sup_new_practice.html',
                     end:function(){
                     	location.reload();
                     }
@@ -157,11 +148,11 @@
             	var id=$(this).attr("id");//比赛id
             	layer.open({
                     type: 2,
-                    title: '编辑比赛',
+                    title: '编辑练习',
                     maxmin: false,
                     shadeClose: false, //点击遮罩关闭层
-                    area: ['600px', '400px'],
-                    content: '/sup_edit_competition.html?id='+id,
+                    area: ['600px', '250px'],
+                    content: '/sup_edit_practice.html?id='+id,
                     end:function(){
                     	location.reload();
                     }
@@ -172,10 +163,10 @@
             */
             $(".publish").on("click",function(){
             	//确认框
-            	if(confirm("确认要发布“"+$(this).attr("competition_title")+"”吗？")){
+            	if(confirm("确认要发布“"+$(this).attr("practice_title")+"”吗？")){
             		var id=$(this).attr("id");//比赛id
             		var state=$(this).attr("state");//传递当前页展示的比赛的状态参数，以便再次回到该页
-                	location.href="/sup_publish_competition?id="+id+"&state="+state;
+                	location.href="/sup_publish_practice?id="+id+"&state="+state;
             	}
             });
             /*
@@ -183,10 +174,10 @@
             */
             $(".undercarriage").on("click",function(){
             	//确认框
-            	if(confirm("确认要将”"+$(this).attr("competition_title")+"下线吗？")){
+            	if(confirm("确认要将”"+$(this).attr("practice_title")+"下线吗？")){
             		var id=$(this).attr("id");//比赛id
             		var state=$(this).attr("state");//传递当前页展示的比赛的状态参数，以便再次回到该页
-            		location.href="/sup_undercarriage_competition?id="+id+"&state="+state;
+            		location.href="/sup_undercarriage_practice?id="+id+"&state="+state;
             	}
             });
             /*
@@ -194,10 +185,10 @@
              */
             $(".delete").on("click",function(){
             	//确认框
-            	if(confirm("确认要删除“"+$(this).attr("competition_title")+"”吗？")){
+            	if(confirm("确认要删除“"+$(this).attr("practice_title")+"”吗？")){
             		var id=$(this).attr("id");//比赛id
             		var state=$(this).attr("state");//传递当前页展示的比赛的状态参数，以便再次回到该页
-            		location.href="/sup_delete_competition?id="+id+"&state="+state;
+            		location.href="/sup_delete_practice?id="+id+"&state="+state;
             	}
             });
             /*
@@ -205,7 +196,7 @@
             */
             $("#state").on("change",function(){
             	var state=$(this).children('option:selected').val();
-            	location.href="/sup_competition.html?state="+state;
+            	location.href="/sup_practice.html?state="+state;
             });
         });
     </script>

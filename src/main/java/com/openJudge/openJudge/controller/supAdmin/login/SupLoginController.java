@@ -1,7 +1,11 @@
 package com.openJudge.openJudge.controller.supAdmin.login;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,16 +28,35 @@ public class SupLoginController {
 	}
 	@RequestMapping(value="/sup/index",method=RequestMethod.POST)
 	public String goIndex(HttpServletRequest request,HttpServletResponse response,ModelMap map){
+		//PageData pd=new PageData(request);
+		//map=pd.getModelMap();
+		//String id=(String)map.get("id");
+		//String psw=(String)map.get("psw");
 		String id=request.getParameter("id");
 		String psw=request.getParameter("psw");
+		String character=request.getParameter("character");//标记登录时身份，请求中无此参数的规定为超级管理员
+		if(character==null){
+			character="0";
+		}
 		SupAdmin supAdmin=supAdminRepository.findSupAdminById(Long.parseLong(id));
+		//map=new ModelMap();
 		if(supAdmin.getPsw().equals(psw)){
-			String last_login=supAdmin.getLast_login().toString();
-			map.addAttribute(supAdmin);
-			map.addAttribute("last_login", last_login);
+			//String last_login=supAdmin.getLast_login().toString();
+			map.addAttribute("supAdmin",supAdmin);
+			Timestamp last_login=supAdmin.getLast_login();
+			map.addAttribute("last_login",last_login);
+			HttpSession session=request.getSession();
+			session.setAttribute("id", id);
+			session.setAttribute("character", character);
+			map.addAttribute("character", character);
+			//更新登录时间
+			Date date=new Date();
+			supAdmin.setLast_login(new Timestamp(date.getTime()));//此处修改supAdmin会导致前面{{map.addAttribute("supAdmin",supAdmin);}}中map中的last_login的值发生改变
+			supAdminRepository.save(supAdmin);
 			return "supAdmin/index";
 		}
 		else{
+			map.addAttribute("msg", "账号密码不匹配！");
 			return "supAdmin/login";
 		}
 	}

@@ -150,7 +150,7 @@ body {
 			<div id="msg_block">
 				<ul class="nav navbar-nav">
 					<li class="dropdown"><a href="" class="dropdown-toggle"
-						data-toggle="dropdown"> xiongsimin <!-- <b class="caret"></b> -->
+						data-toggle="dropdown"> <span th:text="${supAdmin.name}">xiongsimin</span> <!-- <b class="caret"></b> -->
 					</a>
 						<ul class="dropdown-menu" style="position: absolute">
 							<li><a href="#" id="base_msg">基本资料</a></li>
@@ -160,7 +160,8 @@ body {
 						</ul></li>
 				</ul>
 			</div>
-			<div id="character">超级管理员</div>
+			<a th:if="${character} eq '0'"><div id="character">超级管理员</div></a>
+			<a th:unless="${character} eq '0'"><div id="character">管理员</div></a>
 
 		</div>
 	</div>
@@ -175,7 +176,7 @@ body {
 			</dl>
 			<dl>
 				<!-- <dt>药品管理</dt> -->
-				<dt onclick="bars_new('练习',2,'practice.html');">
+				<dt onclick="bars_new('练习',2,'/sup_practice.html');">
 					<img src="/imgs/practice.png">&nbsp;&nbsp;练 习
 				</dt>
 			</dl>
@@ -216,105 +217,104 @@ body {
 			</div>
 		</div>
 	</div>
+	
 	<script type="text/javascript" th:inline="javascript">
-	$(document).ready(function () {
-		var height = window.innerHeight;//浏览器高度
-		var head = height * 0.07;//页面头部高度
-		var main = height * 0.93;//主体高度
-		var bars_height = main * 0.05;//bars元素高度
-		var bars_ul_li_height = main * 0.05;//li元素高度
-		var font_size = $("#head a").css("line-height");//字体大小
-        font_size=font_size.substr(0,font_size.indexOf("p"));//去掉“px”
-        var msg_block_li_a_padding_top_bottom = (head - font_size) / 2;//下拉菜单插件正常显示
-		function to_index() {
-			$("#bars ul li").attr("class", "");//去掉所有li的“live”样式
-			$("#bars_ul_li0").attr("class", "live");//该li加上“live”样式
-			$("#ifrs iframe").css("display", "none");
-			$("#ifrs iframe[src='/sup_welcome.html']").css("display", "block");
-		}
-		//删除对应的iframe(删除bars操作在元素中)
-		$(document).on("click", "#bars ul li img", function(event) {
-			var ifr_url = $(this).attr("url");
-			$("#ifrs iframe[src='" + ifr_url + "']").remove();
-			$("#ifrs iframe").eq(-1).css("display", "block");
-			$(this).parent().remove();
-			$("#bars ul li").eq(-1).attr("class", "live");
+            var height = window.innerHeight;//浏览器高度
+            var head = height * 0.07;//页面头部高度
+            var main = height * 0.93;//主体高度
+            var bars_height = main * 0.05;//bars元素高度
+            var bars_ul_li_height = main * 0.05;//li元素高度
+            var font_size = $("#head a").css("line-height");//字体大小
+            font_size = font_size.substr(0, font_size.indexOf("p"));//去掉“px”
+            var msg_block_li_a_padding_top_bottom = (head - font_size) / 2;//下拉菜单插件正常显示
+            function to_index() {
+                $("#bars ul li").attr("class", "");//去掉所有li的“live”样式
+                $("#bars_ul_li0").attr("class", "live");//该li加上“live”样式
+                $("#ifrs iframe").css("display", "none");
+                $("#ifrs iframe[src='/sup_welcome.html']").css("display", "block");
+            }
+            //删除对应的iframe(删除bars操作在元素中)
+            $(document).on("click", "#bars ul li img", function (event) {
+                var ifr_url = $(this).attr("url");
+                $("#ifrs iframe[src='" + ifr_url + "']").remove();
+                $("#ifrs iframe").eq(-1).css("display", "block");
+                $(this).parent().remove();
+                $("#bars ul li").eq(-1).attr("class", "live");
 
-			//event.stopPropagation();
-		});
-
-		//鼠标经过bars的li元素时更换显眼的图标
-		function chang_close_img(id) {
-			$(id).attr("src", "/imgs/hover_close.png");
-		}
-		//鼠标离开bars的li元素时还原图标
-		function release_close_img(id) {
-			$(id).attr("src", "/imgs/close.png");
-		}
-		//新建一个bars和iframe
-		function bars_new(bars_name, id, url) {
-			//如果该栏已存在，则block，否则新建
-			if ($("#bars_ul_li" + id).length > 0) {
-				//刷新该栏
-				$("#bars ul li").attr("class", "");//去掉所有li的“live”样式
-				$("#bars_ul_li" + id).attr("class", "live");//该li加上“live”样式
-
-				//如果当前活动页为其他，则隐藏其他页，并显示该页
-				//$("#ifrs iframe[src='" + url + "']").attr("src",url);
-				$("#ifrs iframe").css("display", "none");
-				$("#ifrs iframe[src='" + url + "']").css("display", "block");
-
-			} else {
-				//新建该栏
-				$("#bars ul li").attr("class", "");//去掉所有li的“live”样式
-				//新建li
-				//url用来标记对应哪个iframe
-				$("#bars ul")
-						.append(
-								"<li onclick='bars_new(\""
-										+ bars_name
-										+ "\",\""
-										+ id
-										+ "\",\""
-										+ url
-										+ "\");' id='"
-										+ "bars_ul_li"
-										+ id
-										+ "' class='live'> "
-										+ bars_name
-										+ "<img url='"
-										+ url
-										+ "' onmouseleave='release_close_img(this);' onmouseover='chang_close_img(this);' src='/imgs/close.png' alt=''></li>");
-
-				$("#bars ul li").css("line-height", bars_ul_li_height + "px");
-				//新建iframe
-				$("#ifrs").append("<iframe src=" + url + "></iframe>");
-				$("#ifrs iframe").css("display", "none");
-				$("#ifrs iframe[src='" + url + "']").css("display", "block");
-			}
-		}
-		$("#base_msg").on("click",function(){
-            layer.open({
-                type:1,
-                area:['400px','300px'],
-                shadeClose:true,
-                content:'<div style="margin:20px;"><div>昵称：<span>'+[[${supAdmin.name}]]+'</span></div><div>上次登录时间：<span>'+[[${last_login}]]+'</span></div></div>'
+                //event.stopPropagation();
             });
-        });
 
-		$("#head").css("height", head);
-		$("#head").css("line-height", head + "px");
-		$("#left").css("height", main);
-		$("#bars").css("height", bars_height);
-		$("#bars ul li").css("line-height", bars_ul_li_height + "px");
-		$("#msg_block ul li a").css("padding-top", msg_block_li_a_padding_top_bottom + "px");
-        $("#msg_block ul li a").css("padding-bottom", msg_block_li_a_padding_top_bottom + "px");
-        $("#msg_block ul li a").css("color","white");
-        $("#msg_block ul li ul li a").css("color","black");
-		// $("#bars ul li").css("padding-top", main * 0.05*0.2+"px");
-		$("#ifrs").css("height", main * 0.95);
-	});
-	</script>
+            //鼠标经过bars的li元素时更换显眼的图标
+            function chang_close_img(id) {
+                $(id).attr("src", "/imgs/hover_close.png");
+            }
+            //鼠标离开bars的li元素时还原图标
+            function release_close_img(id) {
+                $(id).attr("src", "/imgs/close.png");
+            }
+            //新建一个bars和iframe
+            function bars_new(bars_name, id, url) {
+                //如果该栏已存在，则block，否则新建
+                if ($("#bars_ul_li" + id).length > 0) {
+                    //刷新该栏
+                    $("#bars ul li").attr("class", "");//去掉所有li的“live”样式
+                    $("#bars_ul_li" + id).attr("class", "live");//该li加上“live”样式
+
+                    //如果当前活动页为其他，则隐藏其他页，并显示该页
+                    //$("#ifrs iframe[src='" + url + "']").attr("src",url);
+                    $("#ifrs iframe").css("display", "none");
+                    $("#ifrs iframe[src='" + url + "']").css("display", "block");
+
+                } else {
+                    //新建该栏
+                    $("#bars ul li").attr("class", "");//去掉所有li的“live”样式
+                    //新建li
+                    //url用来标记对应哪个iframe
+                    $("#bars ul")
+                        .append(
+                            "<li onclick='bars_new(\""
+                            + bars_name
+                            + "\",\""
+                            + id
+                            + "\",\""
+                            + url
+                            + "\");' id='"
+                            + "bars_ul_li"
+                            + id
+                            + "' class='live'> "
+                            + bars_name
+                            + "<img url='"
+                            + url
+                            + "' onmouseleave='release_close_img(this);' onmouseover='chang_close_img(this);' src='/imgs/close.png' alt=''></li>");
+
+                    $("#bars ul li").css("line-height", bars_ul_li_height + "px");
+                    //新建iframe
+                    $("#ifrs").append("<iframe src=" + url + "></iframe>");
+                    $("#ifrs iframe").css("display", "none");
+                    $("#ifrs iframe[src='" + url + "']").css("display", "block");
+                }
+            }
+            $("#base_msg").on("click", function () {
+                layer.open({
+                    type: 1,
+                    area: ['400px', '300px'],
+                    shadeClose: true,
+                    content: '<div style="margin:20px;"><div>昵称：<span>' + [[${supAdmin.name}]] + '</span></div><div>上次登录时间：<span>' + [[${#dates.format(last_login,'yyyy-MM-dd HH:mm:ss')}]] + '</span></div></div>'
+                });
+            });
+            
+            $("#head").css("height", head);
+            $("#head").css("line-height", head + "px");
+            $("#left").css("height", main);
+            $("#bars").css("height", bars_height);
+            $("#bars ul li").css("line-height", bars_ul_li_height + "px");
+            $("#msg_block ul li a").css("padding-top", msg_block_li_a_padding_top_bottom + "px");
+            $("#msg_block ul li a").css("padding-bottom", msg_block_li_a_padding_top_bottom + "px");
+            $("#msg_block ul li a").css("color", "white");
+            $("#msg_block ul li ul li a").css("color", "black");
+            // $("#bars ul li").css("padding-top", main * 0.05*0.2+"px");
+            $("#ifrs").css("height", main * 0.95);
+    </script>
 </body>
 
 </html>
