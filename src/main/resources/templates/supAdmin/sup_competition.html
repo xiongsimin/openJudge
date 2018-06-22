@@ -100,6 +100,7 @@
                         <a th:if="${state} eq '0'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon publish" src="imgs/publish.png" alt="发布"></a>
                         <a th:if="${state} eq '1'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线"></a>
                         <a th:if="${state} eq '2'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线"></a>
+                        <a th:if="${state} eq '3'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon reappear" src="imgs/reappear.png" alt="重现"></a>
                         <img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon delete" src="imgs/delete.png" alt="删除">
                     </td>
                 </tr>
