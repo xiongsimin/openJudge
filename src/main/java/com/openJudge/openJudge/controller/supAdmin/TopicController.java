@@ -1,4 +1,4 @@
-package com.openJudge.openJudge.controller.supAdmin.topic;
+package com.openJudge.openJudge.controller.supAdmin;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -15,9 +15,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.openJudge.openJudge.domain.entity.Topic;
-import com.openJudge.openJudge.domain.repository.TopicRepository;
-import com.openJudge.openJudge.pageData.PageData;
+import com.openJudge.openJudge.entity.Topic;
+import com.openJudge.openJudge.myPlugins.PageData;
+import com.openJudge.openJudge.repository.TopicRepository;
 
 @Controller
 public class TopicController {

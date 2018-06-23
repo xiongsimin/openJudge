@@ -1,9 +1,9 @@
-package com.openJudge.openJudge.domain.repository;
+package com.openJudge.openJudge.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.openJudge.openJudge.domain.entity.Topic;
+import com.openJudge.openJudge.entity.Topic;
 
 @Repository
 public interface TopicRepository extends CrudRepository<Topic,Long> {

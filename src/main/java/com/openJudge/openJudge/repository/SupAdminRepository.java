@@ -1,9 +1,9 @@
-package com.openJudge.openJudge.domain.repository;
+package com.openJudge.openJudge.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.openJudge.openJudge.domain.entity.SupAdmin;
+import com.openJudge.openJudge.entity.SupAdmin;
 
 @Repository
 public interface SupAdminRepository extends CrudRepository<SupAdmin, Long>{

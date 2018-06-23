@@ -1,4 +1,4 @@
-package com.openJudge.openJudge.domain.entity;
+package com.openJudge.openJudge.entity;
 
 import java.sql.Timestamp;
 
