@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <style>
+    #main{
+        text-align:-webkit-center;
+        margin-top:20px;
+        margin-bottom: 20px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <form action="/sup_edit_topic" enctype="multipart/formdata" method="post">
+        	<input type="hidden" id="id" name="id" th:value="${topic.id}">
+            <table>
+                <tr>
+                    <td>标题：</td>
+                    <td>
+                        <input th:value="${topic.title}" class="form-control" type="text" name="title" id="title">
+                    </td>
+                </tr>
+                <tr>
+                	<td>类型：</td>
+                	<td><input th:value="${topic.type}"  class="form-control" type="text" name="type" id="type"></td>
+                </tr>
+                <tr>
+                    <td>题目描述：</td>
+                    <td>
+                        <textarea class="form-control" name="content" id="content" cols="60" rows="8">[[${topic.content}]]</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>输入格式：</td>
+                    <td>
+                        <textarea class="form-control" name="input_intro" id="input_intro" cols="60" rows="8">[[${topic.input_intro}]]</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>输出格式：</td>
+                    <td>
+                        <textarea class="form-control" name="output_intro" id="output_intro" cols="60" rows="8">[[${topic.output_intro}]]</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>输入示例：</td>
+                    <td>
+                        <textarea class="form-control" name="input_sample" id="input_sample" cols="60" rows="8">[[${topic.input_sample}]]</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>输出示例：</td>
+                    <td>
+                        <textarea class="form-control" name="output_sample" id="output_sample" cols="60" rows="8">[[${topic.output_sample}]]</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>时间限制（s）：</td>
+                    <td>
+                        <input th:value="${topic.time_limit}" class="form-control" type="text" name="time_limit" id="time_limit">
+                    </td>
+                </tr>
+                <tr>
+                    <td>内存限制（MB）：</td>
+                    <td>
+                        <input th:value="${topic.memory_limit}" class="form-control" type="text" name="memory_limit" id="memory_limit">
+                    </td>
+                </tr>
+                <tr>
+                	<td>数据范围、提示：</td>
+                	<td><textarea class="form-control" name="info" id="info" cols="60" rows="8">[[${topic.info}]]</textarea></td>
+                </tr>
+                <tr>
+                    <td>所属比赛（练习）：</td>
+                    <td>
+                        <select class="form-control" name="competition_id" id="competition_id">
+                            <a th:each="competitionsOrPractice:${competitionsOrPractices}">
+                            	<a th:if="${competitionsOrPractice.id eq topic.competition_id}"><option selected="selected" th:value="${competitionsOrPractice.id}" th:text="${competitionsOrPractice.title}"></option></a>
+                            	<a th:unless="${competitionsOrPractice.id eq topic.competition_id}"><option th:value="${competitionsOrPractice.id}" th:text="${competitionsOrPractice.title}"></option></a>
+                            </a>
+                            <!-- <option th:each="competitionsOrPractice:${competitionsOrPractices}" th:value="${competitionsOrPractice.id}" th:text="${competitionsOrPractice.title}">第N次比赛</option> -->
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                	<td>题目在比赛中的序号：</td>
+                	<td><input th:value="${topic.number}" class="form-control" type="text" name="number" id="number"></td>
+                </tr>
+                <tr>
+                    <td>测试数据：</td>
+                    <td>
+                        <input disabled="true" class="form-control" type="file" name="test_data" id="test_data">&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="chang_test_data" id="chang_test_data" value="1">更改测试数据
+                    </td>
+                </tr>
+                <tr><td colspan="2" style="text-align: center;padding-top:10px;"><input type="submit" class="btn btn-primary" value="保存">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" class="btn btn-danger" value="重置"></td></tr>
+            </table>
+        </form>
+    </div>
+    <script>
+    	$("#chang_test_data").change(function(){
+    		if($(this).prop("checked")==false){ //未选中，则将test_data设置为不可用
+    			$("#test_data").val(null);
+    			$("#test_data").attr("disabled",true);
+    		}else{ //选中，则将test_data设置为可用
+    			$("#test_data").attr("disabled",false);
+    		}
+    	});
+    </script>
+</body>
+
+</html>

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.openJudge.openJudge.entity.Competition;
+import com.openJudge.openJudge.entity.Topic;
 
 @Repository
 public interface CompetitionRepository extends CrudRepository<Competition, Long> {
@@ -33,20 +34,30 @@ public interface CompetitionRepository extends CrudRepository<Competition, Long>
 	 * 查询已结束的比赛
 	 */
 	@Query(value="select * from competition where state=1 AND end_time<?1 AND type=0",nativeQuery=true)
-	List<Competition> findFinishCompetition(Timestamp time);
+	List<Competition> findFinishCompetition(@Param("end_time") Timestamp time);
 	/*
 	 * ***********************************************************
 	 * ************************分隔线*****************************
 	 * ***********************************************************
 	 */
 	/*
-	 * 查询未发布的训练
+	 * 查询未发布的练习
 	 */
 	@Query(value="select * from competition where state=0 AND type=1",nativeQuery=true)
 	List<Competition> findDisPublishPractice();
 	/*
-	 * 查询已发布的训练
+	 * 查询已发布的练习
 	 */
 	@Query(value="select * from competition where state=1 AND type=1",nativeQuery=true)
 	List<Competition> findPublishedPractice();
+	/*
+	 * 查找所有练习
+	 */
+	@Query(value="select * from competition where type=1",nativeQuery=true)
+	List<Competition> findAllPractice();
+	/*
+	 * 通过title查找比赛（练习）
+	 */
+	@Query(value="select * from competition where title=?1",nativeQuery=true)
+	Competition findCompetitionByTitle(@Param("title") String title);
 }

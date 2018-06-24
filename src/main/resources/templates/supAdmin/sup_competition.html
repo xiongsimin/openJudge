@@ -55,6 +55,9 @@
         #myTable td{
         	padding:6px;
         }
+        .msg_style{
+        	background-color:blue;
+        }
     </style>
 </head>
 
@@ -72,7 +75,7 @@
         </select>
         <button id="refresh">
             <a href="">
-                <img src="imgs/refresh.png" alt="">
+                <img src="imgs/refresh.png" alt="" title="刷新">
             </a>
         </button>
     </div>
@@ -96,19 +99,24 @@
                     <td th:text="${#dates.format(competition.start_time,'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td th:text="${#dates.format(competition.end_time,'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td>
-                    	<a th:if="${state} eq '0'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon edit" src="imgs/edit.png" alt="编辑"></a>
-                        <a th:if="${state} eq '0'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon publish" src="imgs/publish.png" alt="发布"></a>
-                        <a th:if="${state} eq '1'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线"></a>
-                        <a th:if="${state} eq '2'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线"></a>
-                        <a th:if="${state} eq '3'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon reappear" src="imgs/reappear.png" alt="重现"></a>
-                        <img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon delete" src="imgs/delete.png" alt="删除">
+                    	<a th:if="${state} eq '0'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon edit" src="imgs/edit.png" alt="编辑" title="编辑"></a>
+                        <a th:if="${state} eq '0'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon publish" src="imgs/publish.png" alt="发布" title="发布"></a>
+                        <a th:if="${state} eq '1'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线" title="下线"></a>
+                        <a th:if="${state} eq '2'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon undercarriage" src="imgs/undercarriage.png" alt="下线" title="下线"></a>
+                        <a th:if="${state} eq '3'"><img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon reappear" src="imgs/reappear.png" alt="重现" title="重现"></a>
+                        <img th:id="${competition.id}" th:competition_title="${competition.title}" th:state="${state}" class="small-icon delete" src="imgs/delete.png" alt="删除" title="删除">
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <script>
+    <script th:inline="javascript">
         $(document).ready(function () {
+        	var msg=[[${msg}]];
+        	if(msg!=null){
+        		//信息提示框
+        		layer.msg(msg);
+        	}
             $('#myTable').DataTable({
 
                 language: {
@@ -195,10 +203,21 @@
              */
             $(".delete").on("click",function(){
             	//确认框
-            	if(confirm("确认要删除“"+$(this).attr("competition_title")+"”吗？")){
+            	if(confirm("确认要删除“"+$(this).attr("competition_title")+"”吗？（警告：将会把属于该比赛的题目一并删除！！！）")){
             		var id=$(this).attr("id");//比赛id
             		var state=$(this).attr("state");//传递当前页展示的比赛的状态参数，以便再次回到该页
             		location.href="/sup_delete_competition?id="+id+"&state="+state;
+            	}
+            });
+            /*
+            **重现
+            */
+            $(".reappear").on("click",function(){
+            	//确认框
+            	if(confirm("确认要重现“"+$(this).attr("competition_title")+"”吗？（将以练习形式发布）")){
+            		var id=$(this).attr("id");//比赛id
+            		var state=$(this).attr("state");//传递当前页展示的比赛的状态参数，以便再次回到该页
+            		location.href="/sup_reappear_competition?id="+id+"&state="+state;
             	}
             });
             /*

@@ -8,7 +8,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="/js/jquery-3.3.1.min.js"></script>
     <style>
     #main{
         text-align:-webkit-center;
@@ -20,7 +20,7 @@
 
 <body>
     <div id="main">
-        <form action="/sup_add_topic" method="post">
+        <form action="/sup_add_topic" enctype="multipart/formdata" method="post">
             <table>
                 <tr>
                     <td>标题：</td>
@@ -81,9 +81,9 @@
                 <tr>
                     <td>所属比赛（练习）：</td>
                     <td>
-                        <select class="form-control" name="competition_id" id="competition_id">
-                            <option value="7">第??次</option>
-                            <option value="9">第??????次</option>
+                        <select  class="form-control" name="competition_id" id="competition_id">
+                        	<option value="">-请选择-</option>
+                            <option th:each="competitionsOrPractice:${competitionsOrPractices}" th:value="${competitionsOrPractice.id}" th:text="${competitionsOrPractice.title}">第N次比赛</option>
                         </select>
                     </td>
                 </tr>
@@ -94,7 +94,7 @@
                 <tr>
                     <td>测试数据：</td>
                     <td>
-                        <input class="form-control" type="file" name="test_data_path" id="test_data_path">
+                        <input class="form-control" type="file" name="test_data" id="test_data">
                     </td>
                 </tr>
                 <tr><td colspan="2" style="text-align: center;"><button class="btn btn-primary">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-danger">重置</button></td></tr>

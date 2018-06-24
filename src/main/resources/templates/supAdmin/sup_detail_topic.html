@@ -25,8 +25,8 @@
 
 <body>
     <div id="main">
-        <h2>素数</h2>
-        <h5>时间限制：1s&nbsp;&nbsp;&nbsp;&nbsp;内存限制：5M</h5>
+        <h2 th:text=${topic.title}>标题</h2>
+        <h5>时间限制：<span th:text="${topic.time_limit}">1s</span>&nbsp;&nbsp;&nbsp;&nbsp;内存限制：<span th:text="${topic.memory_limit}">5M</span></h5>
         <br>
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -34,7 +34,7 @@
                     题目描述
                 </h6>
             </div>
-            <div class="panel-body">
+            <div th:text="${topic.content}" class="panel-body">
                 编写程序列出n以内的所有素数。编写程序列出n以内的所有素数。编写程序列出n以内的所有素数。 编写程序列出n以内的所有素数。编写程序列出n以内的所有素数。
             </div>
         </div>
@@ -45,7 +45,7 @@
                     输入格式
                 </h6>
             </div>
-            <div class="panel-body">
+            <div th:text="${topic.input_intro}" class="panel-body">
                 一个正整数n 一个正整数n 一个正整数n 一个正整数n 一个正整数n 一个正整数n 一个正整数n
             </div>
         </div>
@@ -56,7 +56,7 @@
                     输出格式
                 </h6>
             </div>
-            <div class="panel-body">
+            <div th:text="${topic.output_intro}" class="panel-body">
                 若干个正整数 若干个正整数 若干个正整数 若干个正整数 若干个正整数
             </div>
         </div>
@@ -67,7 +67,7 @@
                     输入示例
                 </h6>
             </div>
-            <div class="panel-body">
+            <div th:text="${topic.input_sample}" class="panel-body">
                 5
             </div>
         </div>
@@ -78,12 +78,23 @@
                     输出示例
                 </h6>
             </div>
-            <div class="panel-body">
+            <div th:text="${topic.output_sample}" class="panel-body">
                 1 2 3 5
             </div>
         </div>
-        <!-- 额外的。。。。。 -->
+        <br>
         <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">
+                    数据说明与提示
+                </h6>
+            </div>
+            <div th:text="${topic.info}" class="panel-body">
+                对于100%的数据n<=10^5
+            </div>
+        </div>
+        <!-- 额外的。。。。。 -->
+        <!-- <div class="panel panel-default">
             <div class="panel-heading">
                 <h6 class="panel-title">
                     提交代码
@@ -97,7 +108,7 @@
                 <button class="btn btn-success">提交</button><br>
             </div>
         </div>
-
+ -->
         <!-- 额外的。。。。。 -->
     </div>
 </body>

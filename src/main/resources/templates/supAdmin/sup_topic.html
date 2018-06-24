@@ -79,6 +79,7 @@
 					<th>上传者</th>
 					<th>上传时间</th>
 					<th>所属比赛（练习）</th>
+					<th>题号</th>
 					<th>尝试人数</th>
 					<th>通过人数</th>
 					<th>通过率</th>
@@ -86,19 +87,20 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr style="height:6%;" th:each="topic:${topics}">
-					<td th:text="${topic.id}">1001</td>
-					<td th:text="${topic.title}">素数</td>
-					<td th:text="${topic.type}">贪心</td>
-					<td th:text="${topic.handler_id}">xiongsimin</td>
-					<td th:text="${topic.time}">2018/5/23 17:00</td>
-					<td th:text="${topic.competition_id}">第一届程序设计大赛</td>
-					<td th:text="${topic.try_people}">20</td>
-					<td th:text="${topic.pass_people}">10</td>
-					<td>50%</td>
-					<td><img id="img1" class="small-icon" src="imgs/check.png">
-						<img class="small-icon" src="imgs/edit.png"> 
-						<img class="small-icon" src="imgs/delete.png"></td>
+				<tr style="height:6%;" th:each="listTopic:${listTopics}">
+					<td th:text="${listTopic.id}">1001</td>
+					<td th:text="${listTopic.title}">素数</td>
+					<td th:text="${listTopic.type}">贪心</td>
+					<td th:text="${listTopic.handler_name}">xiongsimin</td>
+					<td th:text="${listTopic.time}">2018/5/23 17:00</td>
+					<td th:text="${listTopic.competition_title}">第一届程序设计大赛</td>
+					<td th:text="${listTopic.number}">n</td>
+					<td th:text="${listTopic.try_people}">20</td>
+					<td th:text="${listTopic.pass_people}">10</td>
+					<td th:text="${listTopic.throughput_rate}">50%</td>
+					<td><img th:id="${listTopic.id}" th:topic_title="${listTopic.title}" class="small-icon check" src="imgs/check.png">
+						<img th:id="${listTopic.id}" th:topic_title="${listTopic.title}" class="small-icon edit" src="imgs/edit.png"> 
+						<img th:id="${listTopic.id}" th:topic_title="${listTopic.title}" class="small-icon delete" src="imgs/delete.png"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -131,7 +133,7 @@
 				}
 			}
 		});
-		//弹出一个iframe层
+		//新建题目
 		$('#new-topic').on('click', function() {
 			layer.open({
 				type : 2,
@@ -145,15 +147,50 @@
                 }
 			});
 		});
-		$('#img1').on('click', function() {
+		/*
+		**查看题目详情
+		*/
+		$('.check').on('click', function() {
+			//var title=$(this).attr("topic_title");
+			var id=$(this).attr("id");
 			layer.open({
 				type : 2,
-				title : '素数',
+				title : '题目详情',
 				maxmin : true,
 				shadeClose : true, //点击遮罩关闭层
 				area : [ '1000px', '550px' ],
-				content : 'sup_topic_detail.html'
+				content : '/sup_detail_topic.html?id='+id
+				/* end:function(){
+					location.reload();
+				} */
 			});
+		});
+		/*
+		**编辑
+		*/
+		$(".edit").on("click",function(){
+			var id=$(this).attr("id");
+			layer.open({
+				type : 2,
+				title : '编辑',
+				maxmin : true,
+				shadeClose : false, //点击遮罩关闭层
+				area : [ '1000px', '550px' ],
+				content : '/sup_edit_topic.html?id='+id,
+				end:function(){
+					location.reload();
+				}
+			});
+		});
+		/*
+		**删除
+		*/
+		$(".delete").on("click",function(){
+			var id=$(this).attr("id");
+			var topic_title=$(this).attr("topic_title");
+			if(confirm("确认要删除“"+topic_title+"”吗？")){
+				locatition.href="/sup_delete_topic?id="+id;
+			}
 		});
 	</script>
 </body>
