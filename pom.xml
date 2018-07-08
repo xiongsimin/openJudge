@@ -51,6 +51,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
+		<!--  devtools插件，热部署 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+			<scope>true</scope> 
+		</dependency> -->
+
 	</dependencies>
 
 	<build>
@@ -58,6 +66,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- <configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<fork>true</fork>如果没有该项配置，devtools不会起作用，即应用不会restart
+				</configuration> -->
 			</plugin>
 		</plugins>
 	</build>

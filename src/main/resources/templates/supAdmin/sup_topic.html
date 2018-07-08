@@ -54,9 +54,10 @@
 	width: 100%;
 	height: 100%;
 }
-#myTable td{
-        	padding:6px;
-        }
+
+#myTable td {
+	padding: 6px;
+}
 </style>
 </head>
 
@@ -87,25 +88,34 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr style="height:6%;" th:each="listTopic:${listTopics}">
-					<td th:text="${listTopic.id}">1001</td>
-					<td th:text="${listTopic.title}">素数</td>
-					<td th:text="${listTopic.type}">贪心</td>
-					<td th:text="${listTopic.handler_name}">xiongsimin</td>
-					<td th:text="${listTopic.time}">2018/5/23 17:00</td>
-					<td th:text="${listTopic.competition_title}">第一届程序设计大赛</td>
-					<td th:text="${listTopic.number}">n</td>
-					<td th:text="${listTopic.try_people}">20</td>
-					<td th:text="${listTopic.pass_people}">10</td>
-					<td th:text="${listTopic.throughput_rate}">50%</td>
-					<td><img th:id="${listTopic.id}" th:topic_title="${listTopic.title}" class="small-icon check" src="imgs/check.png">
-						<img th:id="${listTopic.id}" th:topic_title="${listTopic.title}" class="small-icon edit" src="imgs/edit.png"> 
-						<img th:id="${listTopic.id}" th:topic_title="${listTopic.title}" class="small-icon delete" src="imgs/delete.png"></td>
+				<tr style="height: 6%;" th:each="topic:${topics}">
+					<td th:text="${topic.id}">1001</td>
+					<td th:text="${topic.title}">素数</td>
+					<td th:text="${topic.type}">贪心</td>
+					<td th:text="${topic.handler_name}">xiongsimin</td>
+					<td th:text="${topic.time}">2018/5/23 17:00</td>
+					<td th:text="${topic.competition.title}">第一届程序设计大赛</td>
+					<td th:text="${topic.number}">n</td>
+					<td th:text="${topic.try_people_number}">20</td>
+					<td th:text="${topic.pass_people_number}">10</td>
+					<td th:text="${topic.rate}">50%</td>
+					<td><img th:id="${topic.id}"
+						th:topic_title="${topic.title}" class="small-icon check"
+						src="imgs/check.png"> <img th:id="${topic.id}"
+						th:topic_title="${topic.title}" class="small-icon edit"
+						src="imgs/edit.png"> <img th:id="${topic.id}"
+						th:topic_title="${topic.title}" class="small-icon delete"
+						src="imgs/delete.png"></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	<script>
+	<script th:inline="javascript">
+		var msg=[[${msg}]];
+		if(msg!=null){
+			layer.msg(msg);
+		}
+		
 		$('#myTable').DataTable({
 
 			language : {
@@ -189,7 +199,7 @@
 			var id=$(this).attr("id");
 			var topic_title=$(this).attr("topic_title");
 			if(confirm("确认要删除“"+topic_title+"”吗？")){
-				locatition.href="/sup_delete_topic?id="+id;
+				location.href="/sup_delete_topic?id="+id;
 			}
 		});
 	</script>

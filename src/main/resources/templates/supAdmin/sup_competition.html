@@ -192,7 +192,7 @@
             */
             $(".undercarriage").on("click",function(){
             	//确认框
-            	if(confirm("确认要将”"+$(this).attr("competition_title")+"下线吗？")){
+            	if(confirm("确认要将”"+$(this).attr("competition_title")+"”下线吗？")){
             		var id=$(this).attr("id");//比赛id
             		var state=$(this).attr("state");//传递当前页展示的比赛的状态参数，以便再次回到该页
             		location.href="/sup_undercarriage_competition?id="+id+"&state="+state;

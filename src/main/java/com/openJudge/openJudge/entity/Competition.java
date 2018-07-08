@@ -1,11 +1,15 @@
 package com.openJudge.openJudge.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 @Entity
 public class Competition {
@@ -15,11 +19,15 @@ public class Competition {
 	private String title;
 	private int handler_character;//发布者身份 0为超级管理员；1为管理员
 	private Long handler_id;//发布者id
+	@Transient
+	private String handler_name;//发布者名字
 	private Timestamp time;//创建时间
 	private Timestamp start_time;
 	private Timestamp end_time;
 	private int Type;//类型：0比赛 1练习（练习和比赛没有本质区别，但权限不同，超级管理员可以管理比赛，但管理员只能管理练习，并且练习没有开始时间和结束时间）
 	private int state;//状态 0：未发布 1：已发布但未开始 2：已发布且正在进行 3：已结束
+	@OneToMany(mappedBy="competition")
+	private List<Topic> topics=new ArrayList<Topic>();
 	public Long getId() {
 		return id;
 	}
@@ -75,11 +83,24 @@ public class Competition {
 	public void setHandler_id(Long handler_id) {
 		this.handler_id = handler_id;
 	}
+	public List<Topic> getTopics() {
+		return topics;
+	}
+	public void setTopics(List<Topic> topics) {
+		this.topics = topics;
+	}
+	public String getHandler_name() {
+		return handler_name;
+	}
+	public void setHandler_name(String handler_name) {
+		this.handler_name = handler_name;
+	}
 	@Override
 	public String toString() {
 		return "Competition [id=" + id + ", title=" + title + ", handler_character=" + handler_character
-				+ ", handler_id=" + handler_id + ", time=" + time + ", start_time=" + start_time + ", end_time="
-				+ end_time + ", Type=" + Type + ", state=" + state + "]";
+				+ ", handler_id=" + handler_id + ", handler_name=" + handler_name + ", time=" + time + ", start_time="
+				+ start_time + ", end_time=" + end_time + ", Type=" + Type + ", state=" + state + ", topics=" + topics
+				+ "]";
 	}
 	
 }

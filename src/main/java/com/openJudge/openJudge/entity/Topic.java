@@ -6,19 +6,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
 @Entity
 public class Topic {
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="topic_gen")
-	@SequenceGenerator(initialValue=1001,allocationSize=1, name = "topic_gen")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;//编号（从1001开始自增）
-	private Long competition_id;//所属比赛（练习的id）
+//	private Long competition_id;//所属比赛（练习的id）//外键
 	private int number;//题目在比赛（练习）中的序号
 	private Timestamp time;//创建时间
 	private int handler_character;//创建人身份
 	private Long handler_id;//创建人id
+	@Transient
+	private String handler_name;//创建人名字
 	private String type;//题目类型
 	private int time_limit;//时间限制(秒)
 	private int memory_limit;//内存限制(MB)
@@ -29,20 +32,19 @@ public class Topic {
 	private String input_sample;//样例（输入）
 	private String output_sample;//样例（输出）
 	private String info;//说明（数据范围、提示等）
-	private int try_people;//尝试人数
-	private int pass_people;//通过人数
+	@Transient   //该注解含义为不在数据库表中生成该字段
+	private int try_people_number;//尝试人数
+	@Transient
+	private int pass_people_number;//通过人数
+	private String try_people;//记录尝试人的id
+	private String pass_people;//记录通过的id
+	@Transient
+	private String rate;//通过率
 	private String test_data_path;//测试数据文件路径
+	@ManyToOne(optional=false)
+	private Competition competition;
 	public Long getId() {
 		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public Long getCompetition_id() {
-		return competition_id;
-	}
-	public void setCompetition_id(Long competition_id) {
-		this.competition_id = competition_id;
 	}
 	public int getNumber() {
 		return number;
@@ -110,18 +112,6 @@ public class Topic {
 	public void setInfo(String info) {
 		this.info = info;
 	}
-	public int getTry_people() {
-		return try_people;
-	}
-	public void setTry_people(int try_people) {
-		this.try_people = try_people;
-	}
-	public int getPass_people() {
-		return pass_people;
-	}
-	public void setPass_people(int pass_people) {
-		this.pass_people = pass_people;
-	}
 	public String getTest_data_path() {
 		return test_data_path;
 	}
@@ -146,13 +136,59 @@ public class Topic {
 	public void setHandler_id(Long handler_id) {
 		this.handler_id = handler_id;
 	}
+	public Competition getCompetition() {
+		return competition;
+	}
+	public void setCompetition(Competition competition) {
+		this.competition = competition;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public int getTry_people_number() {
+		return try_people_number;
+	}
+	public void setTry_people_number(int try_people_number) {
+		this.try_people_number = try_people_number;
+	}
+	public int getPass_people_number() {
+		return pass_people_number;
+	}
+	public void setPass_people_number(int pass_people_number) {
+		this.pass_people_number = pass_people_number;
+	}
+	public String getRate() {
+		return rate;
+	}
+	public void setRate(String rate) {
+		this.rate = rate;
+	}
+	public void setTry_people(String try_people) {
+		this.try_people = try_people;
+	}
+	public void setPass_people(String pass_people) {
+		this.pass_people = pass_people;
+	}
+	public String getTry_people() {
+		return try_people;
+	}
+	public String getPass_people() {
+		return pass_people;
+	}
+	public String getHandler_name() {
+		return handler_name;
+	}
+	public void setHandler_name(String handler_name) {
+		this.handler_name = handler_name;
+	}
 	@Override
 	public String toString() {
-		return "Topic [id=" + id + ", competition_id=" + competition_id + ", number=" + number + ", time=" + time
-				+ ", handler_character=" + handler_character + ", handler_id=" + handler_id + ", type=" + type
-				+ ", time_limit=" + time_limit + ", memory_limit=" + memory_limit + ", title=" + title + ", content="
-				+ content + ", input_intro=" + input_intro + ", output_intro=" + output_intro + ", input_sample="
-				+ input_sample + ", output_sample=" + output_sample + ", info=" + info + ", try_people=" + try_people
-				+ ", pass_people=" + pass_people + ", test_data_path=" + test_data_path + "]";
+		return "Topic [id=" + id + ", number=" + number + ", time=" + time + ", handler_character=" + handler_character
+				+ ", handler_id=" + handler_id + ", handler_name=" + handler_name + ", type=" + type + ", time_limit="
+				+ time_limit + ", memory_limit=" + memory_limit + ", title=" + title + ", content=" + content
+				+ ", input_intro=" + input_intro + ", output_intro=" + output_intro + ", input_sample=" + input_sample
+				+ ", output_sample=" + output_sample + ", info=" + info + ", try_people_number=" + try_people_number
+				+ ", pass_people_number=" + pass_people_number + ", try_people=" + try_people + ", pass_people="
+				+ pass_people + ", rate=" + rate + ", test_data_path=" + test_data_path + "]";
 	}
 }

@@ -82,12 +82,8 @@
                 <tr>
                     <td>所属比赛（练习）：</td>
                     <td>
-                        <select class="form-control" name="competition_id" id="competition_id">
-                            <a th:each="competitionsOrPractice:${competitionsOrPractices}">
-                            	<a th:if="${competitionsOrPractice.id eq topic.competition_id}"><option selected="selected" th:value="${competitionsOrPractice.id}" th:text="${competitionsOrPractice.title}"></option></a>
-                            	<a th:unless="${competitionsOrPractice.id eq topic.competition_id}"><option th:value="${competitionsOrPractice.id}" th:text="${competitionsOrPractice.title}"></option></a>
-                            </a>
-                            <!-- <option th:each="competitionsOrPractice:${competitionsOrPractices}" th:value="${competitionsOrPractice.id}" th:text="${competitionsOrPractice.title}">第N次比赛</option> -->
+                        <select class="form-control" readonly name="competition_id" id="competition_id">
+                            	<option selected="selected" th:value="${competitionOrPractice.id}" th:text="${competitionOrPractice.title}"></option>
                         </select>
                     </td>
                 </tr>

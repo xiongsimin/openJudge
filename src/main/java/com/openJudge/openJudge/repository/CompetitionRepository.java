@@ -13,8 +13,11 @@ import com.openJudge.openJudge.entity.Topic;
 
 @Repository
 public interface CompetitionRepository extends CrudRepository<Competition, Long> {
-	Competition findCompetitionById(Long id);
-//	Iterable<Competition> findCompetitionByState(int state);
+	/*
+	 * ***********************************************************
+	 * ************************比赛*******************************
+	 * ***********************************************************
+	 */
 	/*
 	 * 查询未发布的比赛
 	 */
@@ -37,7 +40,7 @@ public interface CompetitionRepository extends CrudRepository<Competition, Long>
 	List<Competition> findFinishCompetition(@Param("end_time") Timestamp time);
 	/*
 	 * ***********************************************************
-	 * ************************分隔线*****************************
+	 * ************************练习*****************************
 	 * ***********************************************************
 	 */
 	/*
@@ -56,8 +59,20 @@ public interface CompetitionRepository extends CrudRepository<Competition, Long>
 	@Query(value="select * from competition where type=1",nativeQuery=true)
 	List<Competition> findAllPractice();
 	/*
+	 * ***********************************************************
+	 * ***********************公用********************************
+	 * ***********************************************************
+	 */
+	/*
 	 * 通过title查找比赛（练习）
 	 */
 	@Query(value="select * from competition where title=?1",nativeQuery=true)
 	Competition findCompetitionByTitle(@Param("title") String title);
+	/*
+	 * 查找未发布的比赛或练习
+	 */
+	@Query(value="select * from competition where state=0",nativeQuery=true)
+	List<Competition> findDisPublishCompetitionOrPractice();
+	//通过id查询比赛（实际也包括练习）
+	Competition findCompetitionById(Long id);
 }

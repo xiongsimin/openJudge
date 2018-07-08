@@ -15,7 +15,7 @@ import com.openJudge.openJudge.entity.Topic;
 @Repository
 public interface TopicRepository extends CrudRepository<Topic,Long> {
 	Topic findTopicById(Long id);
-	@Query(value="select * from topic where competition_id=?1",nativeQuery=true)
+	@Query(value="select * from topic t,competition c where competition_id=?1 and t.competition_id=c.id order by t.id",nativeQuery=true)
 	List<Topic> findTopicByCompetitionId(@Param("competition_id") Long competitionId);
 	@Modifying
 	@Transactional

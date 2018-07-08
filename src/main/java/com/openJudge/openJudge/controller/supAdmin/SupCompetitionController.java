@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.openJudge.openJudge.entity.Competition;
 import com.openJudge.openJudge.entity.SupAdmin;
 import com.openJudge.openJudge.entity.Topic;
-import com.openJudge.openJudge.myPlugins.PageData;
+import com.openJudge.openJudge.myTools.PageData;
 import com.openJudge.openJudge.repository.CompetitionRepository;
 import com.openJudge.openJudge.repository.SupAdminRepository;
 import com.openJudge.openJudge.repository.TopicRepository;
@@ -37,7 +38,8 @@ public class SupCompetitionController {
 	SupAdminRepository supAdminRepository;
 	@Autowired
 	TopicRepository topicRepository;
-
+	
+	
 	/*
 	 * 比赛列表页
 	 */
@@ -251,23 +253,46 @@ public class SupCompetitionController {
 		Competition competition = competitionRepository.findCompetitionById(id);
 		// 重名验证
 		if (competitionRepository.findCompetitionByTitle(competition.getTitle() + "重现") == null) {
-			/* 新建一个重现赛（练习） */
-			Competition practice = new Competition();
-			practice.setTitle(competition.getTitle() + "重现");
-			practice.setType(1);
-			practice.setStart_time(null);
-			practice.setEnd_time(null);
-			practice.setHandler_id(character_id);
-			practice.setHandler_character(character);
-			practice.setState(1);
-			practice.setTime(time);
-			competitionRepository.save(practice);
-			/* 新建一个重现赛（练习） */
+			/* 新建一个重现赛（实质为练习） */
+			Competition reCompetition = new Competition();
+			reCompetition.setTitle(competition.getTitle() + "重现");
+			reCompetition.setType(1);
+			reCompetition.setStart_time(null);
+			reCompetition.setEnd_time(null);
+			reCompetition.setHandler_id(character_id);
+			reCompetition.setHandler_character(character);
+			reCompetition.setState(1);
+			reCompetition.setTime(time);
+			competitionRepository.save(reCompetition);
+			/* 新建一个重现赛（实质为练习） */
 
-			practice = competitionRepository.findCompetitionByTitle(practice.getTitle());// 获取刚刚新建的练习
+			Competition practice = competitionRepository.findCompetitionByTitle(reCompetition.getTitle());// 获取刚刚新建的练习
 
 			/* 新建一套与原比赛相同的题目 */
-			List<Topic> topics = topicRepository.findTopicByCompetitionId(competition.getId());// 找出对应比赛下的所有题目
+			List<Topic> topics=new ArrayList<Topic>();
+			for(Topic t:competition.getTopics()){
+				Topic topic=new Topic();
+				topic.setCompetition(practice);//设置与该题目对应的练习
+				topic.setContent(t.getContent());
+				topic.setHandler_character(character);
+				topic.setHandler_id(character_id);
+				topic.setInfo(t.getInfo());
+				topic.setInput_intro(t.getInput_intro());
+				topic.setInput_sample(t.getInput_sample());
+				topic.setMemory_limit(t.getMemory_limit());
+				topic.setNumber(t.getNumber());
+				topic.setOutput_intro(t.getOutput_intro());
+				topic.setOutput_sample(t.getOutput_sample());
+				topic.setTest_data_path(t.getTest_data_path());
+				topic.setTime(time);
+				topic.setTime_limit(t.getTime_limit());
+				topic.setTitle(t.getTitle());
+				topic.setTry_people(t.getTry_people());
+				topic.setType(t.getType());
+				topics.add(topic);
+			}
+			topicRepository.saveAll(topics);
+			/*List<Topic> topics = topicRepository.findTopicByCompetitionId(competition.getId());// 找出对应比赛下的所有题目
 			for (Topic topic : topics) {
 				Topic t = new Topic();
 				t.setCompetition_id(practice.getId());
@@ -290,7 +315,7 @@ public class SupCompetitionController {
 				t.setType(topic.getType());
 				topicRepository.save(t);
 				System.out.println("ddd");
-			}
+			}*/
 			/* 新建一套与原比赛相同的题目 */
 			//response.setCharacterEncoding("utf-8");
 			//response.encodeRedirectURL("utf-8");
