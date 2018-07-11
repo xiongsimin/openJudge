@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>题目详情页</title>
+<link rel="stylesheet"
+	href="plugins/DataTables-1.10.16/css/jquery.dataTables.css">
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/user_head.css">
+<script src="js/jquery-3.3.1.min.js"></script>
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="plugins/DataTables-1.10.16/js/jquery.dataTables.js"></script>
+<style>
+#main {
+	width: 90%;
+	margin-left: 50px;
+}
+
+#main h2, h5 {
+	text-align: center;
+}
+</style>
+</head>
+
+<body>
+	<div th:replace="user/common/head.html"></div>
+	<div id="main">
+		<h2 th:text="${topic.title}">素数</h2>
+		<h5>
+			时间限制：<span th:text="${topic.time_limit}">1s</span>&nbsp;&nbsp;&nbsp;&nbsp;内存限制：<span
+				th:text="${topic.time_limit}">5M</span>
+		</h5>
+		<br>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h6 class="panel-title">题目描述</h6>
+			</div>
+			<div class="panel-body" th:text="${topic.content}">
+				编写程序列出n以内的所有素数。编写程序列出n以内的所有素数。编写程序列出n以内的所有素数。
+				编写程序列出n以内的所有素数。编写程序列出n以内的所有素数。</div>
+		</div>
+		<br>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h6 class="panel-title">输入格式</h6>
+			</div>
+			<div class="panel-body" th:text="${topic.input_intro}">一个正整数n
+				一个正整数n 一个正整数n 一个正整数n 一个正整数n 一个正整数n 一个正整数n</div>
+		</div>
+		<br>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h6 class="panel-title">输出格式</h6>
+			</div>
+			<div class="panel-body" th:text="${topic.output_intro}">若干个正整数
+				若干个正整数 若干个正整数 若干个正整数 若干个正整数</div>
+		</div>
+		<br>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h6 class="panel-title">输入示例</h6>
+			</div>
+			<div class="panel-body" th:text="${topic.input_sample}">5</div>
+		</div>
+		<br>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h6 class="panel-title">输出示例</h6>
+			</div>
+			<div class="panel-body" th:text="${topic.output_sample}">1 2 3
+				5</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h6 class="panel-title">提交代码</h6>
+			</div>
+			<div class="panel-body">
+				<input type="hidden" id="topic_id" name="topic_id"
+					th:value="${topic.id}">
+				<textarea class="form-control" name="code" id="code" cols="60"
+					rows="15"></textarea>
+				<br> <input type="radio" name="type"
+					id="code_c" value="c">C
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"
+					name="type" id="code_c++" value="c++">C++
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"
+					name="type" checked="checked" id="code_java" value="java">JAVA <br> <br>
+				<button class="btn btn-success" id="submit" onclick="submit();">提交</button>
+				<br>
+			</div>
+			<div id="result"></div>
+		</div>
+
+	</div>
+	<script>
+		$("input[name=type]").on("click",function(){
+			$("input[name=type]").removeAttr("checked");
+			$(this).attr("checked","checked");
+		});
+		function submit() {
+			$("#code").attr("disabled", "true");
+			$("#submit").attr("disabled", "true");
+			var code = $("#code").val();
+			var type = $("input[name=type][checked=checked]").val();
+			alert(type);
+			var topic_id = $("#topic_id").val();
+			var url = "/submit_code";
+			$.ajax({
+				url : url,
+				data : {
+					"code" : code,
+					"type" : type,
+					"topic_id" : topic_id
+				},
+				type : "get",
+				dataType : "json",
+				success : function(result) {
+					/* alert(result.state+result.errorMsg+result.time+result.memory); */
+					if(result.state=="Accept"){
+						$("#result").html(result.state);
+					}else if(result.state=="Wrong Answer"){
+						$("#result").html(result.state);
+					}else if(result.state=="Runtime Error"){
+						$("#result").html(result.state);
+					}else if(result.state=="Compile Error"){
+						$("#result").html(result.state+"<br>"+result.errorMsg);
+					}
+				},
+				error : function() {
+
+				}
+			});
+		}
+	</script>
+</body>
+</html>

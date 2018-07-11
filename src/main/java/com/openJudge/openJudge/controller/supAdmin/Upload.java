@@ -28,7 +28,7 @@ public class Upload {
 		System.out.println(contentType+"  "+fileName);
 		String filePath="E:/upload";
 		try{
-			FileUtil.uploadFile(file.getBytes(), filePath, fileName);
+			FileUtil.writeToFile(file.getBytes(), filePath, fileName);
 		}catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("文件上传失败！");
