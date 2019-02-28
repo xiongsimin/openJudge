@@ -31,6 +31,6 @@ public interface TopicRepository extends CrudRepository<Topic,Long> {
 	@Transactional
 	@Query(value="delete from topic where competition_id=?1",nativeQuery=true)
 	void deleteByCompetitionId(@Param("competition_id") Long competitionId);
-	@Query(value="select distinct * from topic t,competition c where t.competition_id=c.id and c.type=1",nativeQuery=true)
-	List<Topic> findTopicOfPractice();
+	@Query(value="select distinct * from topic t,competition c where t.competition_id=c.id and c.type=1 and c.state=1",nativeQuery=true)
+	List<Topic> findTopicsOfPublishedPractice();
 }

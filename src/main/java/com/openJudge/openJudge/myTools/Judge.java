@@ -21,10 +21,10 @@ public class Judge {
 	 * @param memoryLimit	内存限制（单位为MB）
 	 * @Param testDataPath	测试文件所在目录
 	 * @param userId	````用户id
-	 * @return	返回是包括4个键值对的map，分别是state-评测结果（AC、）
+	 * @return	返回是包括4个键值对的map，分别是state-评测结果（Accept、Compile Error、Runtime Error、Wrong Answer、System Error）、errorMsg-错误信息、time-运行时间（暂未实现）、memory-占用内存（暂未实现）
 	 * @throws IOException 
 	 */
-	public static Map<String,String> doJudge(String code,String type,int timeLimit,int memoryLimit,String testDataPath,int userId) throws IOException{
+	public static Map<String,String> doJudge(String code,String type,int timeLimit,int memoryLimit,String testDataPath,Long userId) throws IOException{
 		Map<String,String> map=new HashMap<String,String>();
 		Date date=new Date();
 		Long time=date.getTime();//获取系统当前时间
@@ -74,6 +74,7 @@ public class Judge {
 							dos.write(inputFile.getBytes());
 							dos.flush();
 							dos.close();
+							//p1.wait(Long.parseLong("2000"));
 							System.out.println("输入了"+inputFile);
 						}catch (Exception e) {
 							// TODO: handle exception
@@ -105,10 +106,11 @@ public class Judge {
 						String rightAnswer=FileUtil.readFromFile(outputFile1);//从输出文件获取正确结果
 						//System.out.println(22+rightAnswer+11);
 						//5.运行java Xxx ,并将输入内容以参数形式输入，并捕获返回的运行结果（只有一个输出结果的情况）
-						String[] command2={"E:\\jdk8u171\\bin\\java.exe","-cp",codePath,classFileName};
+						String[] command2={"E:\\jdk8u171\\bin\\java.exe","-Djava.security.manager","-cp",codePath,classFileName};
 						System.out.println(codePath+File.separator+classFileName+".class");
 						try{
 							p1=rt.exec(command2);
+							//p1.destroy();
 						}catch (Exception e) {
 							// TODO: handle exception
 							System.out.println("执行java命令出错！");
@@ -136,7 +138,7 @@ public class Judge {
 			}
 			
 			map.put("time", "2");
-			map.put("memory", "500");
+			map.put("memory", "1");
 			return map;
 			}
 		return map;
@@ -164,7 +166,7 @@ public class Judge {
 		try{
 			BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream,Charset.forName("GBK")));
 			String line;
-			while((line=reader.readLine())!=null){
+			while((line=reader.readLine())!=null&&msg.length()<200){
 				out.println(line);
 				msg+=line;
 			}

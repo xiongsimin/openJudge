@@ -1,13 +1,14 @@
 package com.openJudge.openJudge.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
@@ -41,8 +42,17 @@ public class Topic {
 	@Transient
 	private String rate;//通过率
 	private String test_data_path;//测试数据文件路径
-	@ManyToOne(optional=false)
+	@ManyToOne(optional=false)//一对多与多对一双向关系中，一是关系维护端，此处optional设为false，意为当关系维护段不存在时，被维护端返回的值也是null
 	private Competition competition;
+	@OneToMany(mappedBy="topic")
+	private List<Record> records;
+	
+	public List<Record> getRecords() {
+		return records;
+	}
+	public void setRecords(List<Record> records) {
+		this.records = records;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -189,6 +199,7 @@ public class Topic {
 				+ ", input_intro=" + input_intro + ", output_intro=" + output_intro + ", input_sample=" + input_sample
 				+ ", output_sample=" + output_sample + ", info=" + info + ", try_people_number=" + try_people_number
 				+ ", pass_people_number=" + pass_people_number + ", try_people=" + try_people + ", pass_people="
-				+ pass_people + ", rate=" + rate + ", test_data_path=" + test_data_path + "]";
+				+ pass_people + ", rate=" + rate + ", test_data_path=" + test_data_path + ", competition=" + competition
+				+ ", records=" + records + "]";
 	}
 }

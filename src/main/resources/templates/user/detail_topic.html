@@ -95,9 +95,17 @@
 				<button class="btn btn-success" id="submit" onclick="submit();">提交</button>
 				<br>
 			</div>
-			<div id="result"></div>
 		</div>
-
+		<div id="result" style="display:none;" class="panel panel-default">
+			<div class="panel-heading">
+				<h6 class="panel-title">评测结果</h6>
+			</div>
+			<div class="panel-body">
+				<div id="state"></div>
+				<div id="errorMsg"></div>
+			</div>
+		</div>
+		
 	</div>
 	<script>
 		$("input[name=type]").on("click",function(){
@@ -122,15 +130,22 @@
 				type : "get",
 				dataType : "json",
 				success : function(result) {
-					/* alert(result.state+result.errorMsg+result.time+result.memory); */
-					if(result.state=="Accept"){
-						$("#result").html(result.state);
-					}else if(result.state=="Wrong Answer"){
-						$("#result").html(result.state);
-					}else if(result.state=="Runtime Error"){
-						$("#result").html(result.state);
-					}else if(result.state=="Compile Error"){
-						$("#result").html(result.state+"<br>"+result.errorMsg);
+					var state=result.state;
+					var errorMsg=result.errorMsg;
+					$("#result").css("display","block");
+					if(state=="Accept"){
+						$("#state").css("color","green");
+						$("#state").html(state);
+					}else if(state=="Wrong Answer"){
+						$("#state").css("color","red");
+						$("#state").html(state);
+					}else if(state=="Runtime Error"){
+						$("#state").css("color","red");
+						$("#state").html(state);
+					}else if(state=="Compile Error"){
+						$("#state").css("color","red");
+						$("#state").html(state);
+						$("#errorMsg").html(errorMsg);
 					}
 				},
 				error : function() {

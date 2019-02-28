@@ -13,19 +13,19 @@
 </head>
 <body>
 	<div class="top" style="text-align: -webkit-center;">
-		<h2>超级管理员</h2>
+		<h2>普通用户</h2>
 		<br>
-		<form action="/sup/index" method="post" onsubmit="return check();">
+		<form action="/user/index" method="post" onsubmit="return check();">
 			<table>
 				<tr>
-					<td><input class="form-control" style="width:250px;" type="text" name="id" id="id" placeholder="账号"></td>
+					<td><input class="form-control" style="width:250px;" type="text" name="account" id="account" placeholder="账号"></td>
 
 				</tr>
 				<tr>
 				<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><input class="form-control" style="width:250px;" type="password" name="psw" id="psw" placeholder="密码"></td>
+					<td><input class="form-control" style="width:250px;" type="password" name="password" id="password" placeholder="密码"></td>
 				</tr>
 				<tr>
 				<td>&nbsp;</td>
@@ -39,15 +39,11 @@
 	</div>
 	<script>
 	function check(){
-		if($("#id").val()==null||$("#id").val()==""){
+		if($("#account").val()==null||$("#account").val()==""){
 			alert("账号不能为空！");
 			return false;
 		}
-		if(isNaN($("#id").val())){
-			alert("账号不能为非数字！");
-			return false;
-		}
-		if($("#psw").val()==null||$("#psw").val()==""){
+		if($("#password").val()==null||$("#password").val()==""){
 			alert("密码不能为空！");
 			return false;
 		}

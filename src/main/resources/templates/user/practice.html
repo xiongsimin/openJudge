@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>练习页</title>
+<link rel="stylesheet"
+	href="plugins/DataTables-1.10.16/css/jquery.dataTables.css">
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/user_head.css">
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/Highcharts.js"></script>
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="plugins/DataTables-1.10.16/js/jquery.dataTables.js"></script>
+<style>
+#main1 {
+	width: 90%;
+	margin-left: 50px;
+	margin-top: 50px;
+}
+
+.left {
+	float: left;
+	width: 100%;
+}
+
+.right {
+	float: left;
+}
+
+#le {
+	float: left;
+}
+
+#ri {
+	float: left;
+	margin-left: 10px;
+}
+</style>
+</head>
+<body>
+	<div th:include="user/common/head.html"></div>
+	<div th:each="practice:${practices}">
+		<div id="main1">
+			<div>
+				<div class="left">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h6 class="panel-title"><span th:text="${practice.title}">第一次比赛</span></h6>
+						</div>
+						<div class="panel-body">
+							<div id="le" style="width: 60%;">
+								<table class="display myTable">
+									<thead>
+										<tr>
+											<th>编号</th>
+											<th>标题</th>
+											<th>类型</th>
+											<th>尝试人数</th>
+											<th>通过人数</th>
+											<th>通过率</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="topic:${practice.topics}">
+											<td th:text="${topic.id}">1001</td>
+											<td><a th:href="@{'/detail_topic.html?id='+${topic.id}}" th:text="${topic.title}"></a></td>
+											<td th:text="${topic.type}">？？</td>
+											<td th:text="${topic.try_people_number}">20</td>
+											<td th:text="${topic.pass_people_number}">10</td>
+											<td th:text="${topic.rate}">50%</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div id="ri">
+								<div th:id="chart1"
+									style="width: 400px; height: 250px; margin: 0 auto"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:inline="javascript">
+        $(document).ready(function () {
+            $('.myTable').DataTable({
+
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第<span style='color:red;'> _START_ </span>至 <span style='color:red;'> _END_ </span>项结果，共 <span style='color:red;'> _TOTAL_ </span>项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                }
+            });
+            var title = {
+                    text: '通过情况'
+                };
+                var subtitle = {
+                    text: '学生数与通过题数的关系'
+                };
+                var xAxis = {
+                    categories: ['题目1', '题目二', '题目三', '题目四', '题目五', '题目六']
+                };
+                var yAxis = {
+                    title: {
+                        text: '学生数（人）'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                };
+
+                var tooltip = {
+                    valueSuffix: '\xB0C'
+                }
+
+                var legend = {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                };
+
+                var series = [
+                    {
+                        name: '折线图',
+                        data: [14, 8, 6, 2,20,3]
+                    }
+                ];
+
+                var json = {};
+
+                json.title = title;
+                json.subtitle = subtitle;
+                json.xAxis = xAxis;
+                json.yAxis = yAxis;
+                json.tooltip = tooltip;
+                json.legend = legend;
+                json.series = series;
+
+                $('#chart1').highcharts(json);
+        });
+        </script>
+</body>
+</html>

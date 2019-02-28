@@ -27,7 +27,7 @@ public class Competition {
 	private int Type;//类型：0比赛 1练习（练习和比赛没有本质区别，但权限不同，超级管理员可以管理比赛，但管理员只能管理练习，并且练习没有开始时间和结束时间）
 	private int state;//状态 0：未发布 1：已发布但未开始 2：已发布且正在进行 3：已结束
 	@OneToMany(mappedBy="competition")
-	private List<Topic> topics=new ArrayList<Topic>();
+	private List<Topic> topics;
 	public Long getId() {
 		return id;
 	}
