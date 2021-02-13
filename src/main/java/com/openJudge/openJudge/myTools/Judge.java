@@ -1,5 +1,7 @@
 package com.openJudge.openJudge.myTools;
 
+import com.openJudge.openJudge.consist.BaseConstant;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -22,22 +24,22 @@ public class Judge {
 	 * @Param testDataPath	测试文件所在目录
 	 * @param userId	````用户id
 	 * @return	返回是包括4个键值对的map，分别是state-评测结果（Accept、Compile Error、Runtime Error、Wrong Answer、System Error）、errorMsg-错误信息、time-运行时间（暂未实现）、memory-占用内存（暂未实现）
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Map<String,String> doJudge(String code,String type,int timeLimit,int memoryLimit,String testDataPath,Long userId) throws IOException{
 		Map<String,String> map=new HashMap<String,String>();
 		Date date=new Date();
 		Long time=date.getTime();//获取系统当前时间
 		if(type.equals("java")){//对java进行处理
-			//1.在指定目录下建一个Main.java文件，并将code写入（目录命名规则：E:\openJudge_judge\用户id\系统当前时间）
-			String codePath="E:\\openJudge_judge"+File.separator+userId+File.separator+time;
+			//1.在指定目录下建一个Main.java文件，并将code写入（目录命名规则：F:\openJudge_judge\用户id\系统当前时间）
+			String codePath="F:\\openJudge_judge"+File.separator+userId+File.separator+time;
 			String sourceFileName="Main.java";
 			FileUtil.writeToFile(code.getBytes(),codePath,sourceFileName);
 			//2.使用javac Xxx.java进行编译
 			Runtime rt=Runtime.getRuntime();
 			Process p1=null;//
 			Process p2=null;//
-			String[] command1={"E:\\jdk8u171\\bin\\javac.exe","-encoding","utf-8",codePath+File.separator+sourceFileName};
+			String[] command1={BaseConstant.JDK_PATH+"\\javac.exe","-encoding","utf-8",codePath+File.separator+sourceFileName};
 			try{
 				p1=rt.exec(command1);
 			}catch (Exception e) {
@@ -48,6 +50,7 @@ public class Judge {
 			if(map.get("errorMsg")!=""){//编译出错
 				map.put("state", "Compile Error");
 			}else{//编译通过
+				//TODO 尝试从缓存中获取题目输入、输出用例，缓存中不存在再从文件中读取
 				//3.获取编译后的class文件名
 				String classFileName="";//用于存储class文件名
 				File[] sourceFiles=(new File(codePath)).listFiles();
@@ -65,7 +68,7 @@ public class Judge {
 					for(int i=1;i<=count;i++){//循环判断是否满足所有测试用例
 						String inputFile=FileUtil.readFromFile(testDataPath+File.separator+"input"+i+".txt");//从输入文件获取输入
 						String rightAnswer=FileUtil.readFromFile(testDataPath+File.separator+"output"+i+".txt");//从输出文件获取正确结果
-						String[] command2={"E:\\jdk8u171\\bin\\java.exe","-cp",codePath,classFileName};
+						String[] command2={BaseConstant.JDK_PATH+"\\java.exe","-cp",codePath,classFileName};
 						System.out.println(codePath+File.separator+classFileName+".class");
 						try{
 							p1=rt.exec(command2);
@@ -98,15 +101,15 @@ public class Judge {
 							}
 						}
 					}
-					
-					
+
+
 				}else{//不存在输入文件，只需要判断结果与输出文件是否相同（肯定只有一个输出测试文件）
 					File outputFile1=new File(testDataPath+File.separator+"output1.txt");
 					if(outputFile1.exists()){//输出测试文件存在
 						String rightAnswer=FileUtil.readFromFile(outputFile1);//从输出文件获取正确结果
 						//System.out.println(22+rightAnswer+11);
 						//5.运行java Xxx ,并将输入内容以参数形式输入，并捕获返回的运行结果（只有一个输出结果的情况）
-						String[] command2={"E:\\jdk8u171\\bin\\java.exe","-Djava.security.manager","-cp",codePath,classFileName};
+						String[] command2={"I:\\jdk1.8.0_171\\bin\\java.exe","-Djava.security.manager","-cp",codePath,classFileName};
 						System.out.println(codePath+File.separator+classFileName+".class");
 						try{
 							p1=rt.exec(command2);
@@ -133,10 +136,10 @@ public class Judge {
 						map.put("errorMsg", "System Error");
 					}
 				}
-				
+
 				//6.判断运行结果，给4个键值对赋值
 			}
-			
+
 			map.put("time", "2");
 			map.put("memory", "1");
 			return map;
@@ -144,7 +147,7 @@ public class Judge {
 		return map;
 	}
 	public static void runCode(String code,String type,String testDataPath){
-		
+
 	}
 	/**
 	 * 打印进程输出结果

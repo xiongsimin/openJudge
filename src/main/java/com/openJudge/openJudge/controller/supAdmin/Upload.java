@@ -26,7 +26,7 @@ public class Upload {
 		
 		String fileName=file.getOriginalFilename();
 		System.out.println(contentType+"  "+fileName);
-		String filePath="E:/upload";
+		String filePath="F:/upload";
 		try{
 			FileUtil.writeToFile(file.getBytes(), filePath, fileName);
 		}catch (Exception e) {

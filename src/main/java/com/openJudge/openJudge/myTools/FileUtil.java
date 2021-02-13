@@ -126,8 +126,8 @@ public class FileUtil {
 		}
 	}
 /*	public static void main(String[] args) throws IOException {
-		//moveFile("E:\\openJudge_upload\\69\\2", "E:\\openJudge_upload\\69\\2DataTables.zip");
-		String s=readFromFile(new File("E:\\test\\b.java"));
+		//moveFile("F:\\openJudge_upload\\69\\2", "F:\\openJudge_upload\\69\\2DataTables.zip");
+		String s=readFromFile(new File("F:\\test\\b.java"));
 		System.out.println(s);
 	}*/
 }
