@@ -39,3 +39,8 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 5000ms
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest

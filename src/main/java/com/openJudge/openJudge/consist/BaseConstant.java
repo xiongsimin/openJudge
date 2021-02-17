@@ -14,5 +14,6 @@ public class BaseConstant {
     public static final String JUDGE_RESULT_STATE_WRONG_ANSWER="Wrong Answer";
     public enum type {JAVA, C_PLUS_PLUS, PYTHON}
 
-    ;
+    public static final String WHICH_STAGE_COMPILE="compile";
+    public static final String WHICH_STAGE_EXECUTE="execute";
 }
