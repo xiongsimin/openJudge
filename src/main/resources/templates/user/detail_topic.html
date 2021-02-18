@@ -105,6 +105,11 @@
 				<div id="errorMsg"></div>
 			</div>
 		</div>
+		<div id="error_sample_list" style="display:none;" class="panel panel-default">
+			<div class="panel-heading">
+				<h6 class="panel-title">未通过用例</h6>
+			</div>
+		</div>
 		
 	</div>
 	<script>
@@ -132,7 +137,7 @@
 				success : function(result) {
 					console.log(result);
 					var state=result.state;
-					var errorMsg=result.errorMsg;
+					var errorMsg=result.compileErrorMsg;
 					console.log(state);
 					console.log(errorMsg);
 					$("#result").css("display","block");
@@ -142,6 +147,15 @@
 					}else if(state=="Wrong Answer"){
 						$("#state").css("color","red");
 						$("#state").html(state);
+						var errorSampleDom=$("#error_sample_list");
+						var errorSampleData=result.failedSamples;
+						console.log(errorSampleData);
+						for(let i in errorSampleData){
+							errorSampleDom.append("<div style='border: #8D8D8D solid'>用例输入："+errorSampleData[i].input+"<br>" +
+									"正确结果："+errorSampleData[i].output+"<br>" +
+									"错误结果："+errorSampleData[i].userOutput+"<br></div><br><br>")
+						}
+						errorSampleDom.css("display","block");
 					}else if(state=="Runtime Error"){
 						$("#state").css("color","red");
 						$("#state").html(state);
@@ -149,6 +163,9 @@
 						$("#state").css("color","red");
 						$("#state").html(state);
 						$("#errorMsg").html(errorMsg);
+					}else if(state=="System Busy"){
+						$("#state").css("color","red");
+						$("#state").html(state);
 					}
 				},
 				error : function() {

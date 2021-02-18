@@ -13,6 +13,7 @@ public class BaseConstant {
     public static final String JUDGE_RESULT_STATE_RUNTIME_ERROR="Runtime Error";
     public static final String JUDGE_RESULT_STATE_WRONG_ANSWER="Wrong Answer";
     public static final String JUDGE_RESULT_STATE_COMPILE_ERROR="Compile Error";
+    public static final String JUDGE_RESULT_STATE_SYSTEM_BUSY="System Busy";
     public enum type {JAVA, C_PLUS_PLUS, PYTHON}
 
     public static final String WHICH_STAGE_COMPILE="compile";

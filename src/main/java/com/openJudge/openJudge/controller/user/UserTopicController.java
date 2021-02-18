@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import com.openJudge.openJudge.entity.*;
 import com.openJudge.openJudge.myTools.NewJudge;
 import com.openJudge.openJudge.service.SampleService;
+import com.openJudge.openJudge.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,6 +36,8 @@ public class UserTopicController {
     SampleService sampleService;
     @Autowired
     private NewJudge newJudge;
+    @Autowired
+    TopicService topicService;
 
 
     @GetMapping("/topic.html")
@@ -98,7 +101,7 @@ public class UserTopicController {
         Timestamp submitTime = new Timestamp(date.getTime());
         Map<String, String> map = new HashMap<String, String>();
         Topic topic = new Topic();
-        topic = topicRepository.findTopicById(topicId);
+        topic = topicService.findTopicById(topicId);
         System.out.println(topic.getTest_data_path());
         // 集成Redis缓存
         List<Sample> sampleList = sampleService.findSampleByTopicId(topicId);
@@ -148,7 +151,6 @@ public class UserTopicController {
                 }
             }
         }
-        topicRepository.save(topic);
         Record record = new Record();
         record.setUser_id(userId);
         record.setState(judgeResult.getState());

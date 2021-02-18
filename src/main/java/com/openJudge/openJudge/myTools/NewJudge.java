@@ -4,6 +4,7 @@ import com.openJudge.openJudge.consist.BaseConstant;
 import com.openJudge.openJudge.entity.ExecutorResult;
 import com.openJudge.openJudge.entity.JudgeResult;
 import com.openJudge.openJudge.entity.Sample;
+import com.openJudge.openJudge.exception.CustomException;
 import com.openJudge.openJudge.executor.Executor;
 import com.openJudge.openJudge.factory.executor.ExecutorFactory;
 import org.apache.commons.lang.StringUtils;
@@ -144,9 +145,14 @@ public class NewJudge {
                 Executor executeExecutor = ExecutorFactory.getInstance(type, BaseConstant.WHICH_STAGE_EXECUTE, sourceFilePath, sourceFilePath, sample);
 //                myExecuteTaskThreadPool.submit((Runnable) executeExecutor);
                 ExecutorResult executeResult = null;
-
-                Future<ExecutorResult> executeFuture = myExecuteTaskThreadPool.submit((Callable<ExecutorResult>) executeExecutor);
-                futureList.add(executeFuture);
+                try {
+                    Future<ExecutorResult> executeFuture = myExecuteTaskThreadPool.submit((Callable<ExecutorResult>) executeExecutor);
+                    futureList.add(executeFuture);
+                } catch (RejectedExecutionException e) {
+                    result.setState(BaseConstant.JUDGE_RESULT_STATE_SYSTEM_BUSY);
+                    e.printStackTrace();
+                    return result;
+                }
             }
             for (Future<ExecutorResult> future : futureList) {
                 ExecutorResult executorResult = null;

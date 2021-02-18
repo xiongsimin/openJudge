@@ -35,6 +35,7 @@ public class OpenJudgeApplication {
         Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
         //对缓存进行过期时间配置，此处的key对应注解@Cacheable的value值
         redisCacheConfigurationMap.put("SamplesCache", getRedisCacheConfigurationWithTtl(24 * 60 * 60));
+        redisCacheConfigurationMap.put("TopicCache", getRedisCacheConfigurationWithTtl(24 * 60 * 60));
         return redisCacheConfigurationMap;
     }
 
