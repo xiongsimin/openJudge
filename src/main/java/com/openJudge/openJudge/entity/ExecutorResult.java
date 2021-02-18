@@ -8,8 +8,15 @@ package com.openJudge.openJudge.entity;
 public class ExecutorResult {
     private String result;
     private String errorMsg;
+    private Sample sample;
 
     public ExecutorResult() {
+    }
+
+    public ExecutorResult(String result, String errorMsg, Sample sample) {
+        this.result = result;
+        this.errorMsg = errorMsg;
+        this.sample = sample;
     }
 
     public ExecutorResult(String result, String errorMsg) {
@@ -33,11 +40,20 @@ public class ExecutorResult {
         this.errorMsg = errorMsg;
     }
 
+    public Sample getSample() {
+        return sample;
+    }
+
+    public void setSample(Sample sample) {
+        this.sample = sample;
+    }
+
     @Override
     public String toString() {
         return "ExecutorResult{" +
                 "result='" + result + '\'' +
                 ", errorMsg='" + errorMsg + '\'' +
+                ", sample=" + sample +
                 '}';
     }
 }

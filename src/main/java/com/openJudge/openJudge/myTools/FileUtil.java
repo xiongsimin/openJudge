@@ -17,18 +17,23 @@ public class FileUtil {
 	 * @param filePath 文件目录
 	 * @param fileName 文件名
 	 */
-	public static void writeToFile(byte[] file,String filePath,String fileName) throws IOException{
-		File targetFile=new File(filePath);
-		if(!targetFile.exists()){
+	public static void writeToFile(byte[] file, String filePath, String fileName) throws IOException {
+		File targetFile = new File(filePath);
+		if (!targetFile.exists()) {
 			targetFile.mkdirs();
-			System.out.println("新建了路径【"+filePath+"】");
+			System.out.println("新建了路径【" + filePath + "】");
 		}
-			FileOutputStream out=new FileOutputStream(filePath+File.separator+fileName);
+		FileOutputStream out = new FileOutputStream(filePath + File.separator + fileName);
+		try {
 			out.write(file);
 			out.flush();
 			System.out.println("成功写入文件！");
+		}catch (IOException e){
+			e.printStackTrace();
+		}finally {
 			out.close();
 			System.out.println("成功关闭写入流！");
+		}
 	}
 	/**
 	 * 读取文件内容并放入String中

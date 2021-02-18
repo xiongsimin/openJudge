@@ -22,23 +22,11 @@ public class ProcessUtil {
      * @param process
      * @return map(" result " - result, " errorMsg " - errorMsg)
      */
-/*
-    public static Map<String, String> getSystemOut(final Process process) {
-        Map<String, String> map = new HashMap<String, String>();
-        String result = read(process.getInputStream(), System.out).get("msg");
-        String errorMsg = read(process.getErrorStream(), System.err).get("msg");
-        map.put("result", result);
-        map.put("errorMsg", errorMsg);
-        return map;
-    }
-*/
-    public static ExecutorResult getSystemOut(final Process process) {
-        ExecutorResult executorResult=new ExecutorResult();
+    public static void getSystemOut(final Process process,ExecutorResult executorResult) {
         String result = read(process.getInputStream(), System.out).get("msg");
         String errorMsg = read(process.getErrorStream(), System.err).get("msg");
         executorResult.setResult(result);
         executorResult.setErrorMsg(errorMsg);
-        return executorResult;
     }
 
 

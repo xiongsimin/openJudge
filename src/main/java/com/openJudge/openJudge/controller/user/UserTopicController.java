@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,8 @@ public class UserTopicController {
     RecordRepository recordRepository;
     @Autowired
     SampleService sampleService;
+    @Autowired
+    private NewJudge newJudge;
 
 
     @GetMapping("/topic.html")
@@ -85,7 +88,7 @@ public class UserTopicController {
 
     @GetMapping("/submit_code")
     @ResponseBody
-    public Map<String, String> judgeCode(HttpServletRequest request) throws IOException {
+    public JudgeResult judgeCode(HttpServletRequest request) throws IOException {
         HttpSession session = request.getSession();
         Long userId = ((User) session.getAttribute("user")).getId();
         Long topicId = Long.parseLong(request.getParameter("topic_id"));
@@ -99,7 +102,12 @@ public class UserTopicController {
         System.out.println(topic.getTest_data_path());
         // 集成Redis缓存
         List<Sample> sampleList = sampleService.findSampleByTopicId(topicId);
-        JudgeResult judgeResult = NewJudge.judge(code, sampleList, type, userId);
+        JudgeResult judgeResult = null;
+        try {
+            judgeResult = newJudge.newJudge(code, sampleList, type, userId);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 //		map=Judge.doJudge(code,type,topic.getTime_limit(),topic.getMemory_limit(),topic.getTest_data_path(),userId);
         //保存提交记录
         String tryPeople = topic.getTry_people();
@@ -150,7 +158,7 @@ public class UserTopicController {
 //        record.setSubmit_time(submitTime);
         record.setTopic(topic);
         recordRepository.save(record);
-        return map;
+        return judgeResult;
     }
 
     @GetMapping("/topic_sample")

@@ -130,8 +130,11 @@
 				type : "get",
 				dataType : "json",
 				success : function(result) {
+					console.log(result);
 					var state=result.state;
 					var errorMsg=result.errorMsg;
+					console.log(state);
+					console.log(errorMsg);
 					$("#result").css("display","block");
 					if(state=="Accept"){
 						$("#state").css("color","green");

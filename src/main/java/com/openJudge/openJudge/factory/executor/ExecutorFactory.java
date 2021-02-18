@@ -1,6 +1,7 @@
 package com.openJudge.openJudge.factory.executor;
 
 import com.openJudge.openJudge.consist.BaseConstant;
+import com.openJudge.openJudge.entity.Sample;
 import com.openJudge.openJudge.executor.Executor;
 import com.openJudge.openJudge.executor.impl.JavaCompilerExecutor;
 import com.openJudge.openJudge.executor.impl.JavaExecuteExecutor;
@@ -24,14 +25,14 @@ public class ExecutorFactory {
      * @return
      * @throws Exception
      */
-    public static Executor getInstance(String language, String whichStage, String sourceFilePath, String targetFilePath, String input) {
+    public static Executor getInstance(String language, String whichStage, String sourceFilePath, String targetFilePath, Sample sample) {
         Executor executor = null;
         switch (language) {
             case "java":
                 if (BaseConstant.WHICH_STAGE_COMPILE.equals(whichStage)) {
                     executor = new JavaCompilerExecutor(sourceFilePath);
                 } else if (BaseConstant.WHICH_STAGE_EXECUTE.equals(whichStage)) {
-                    executor = new JavaExecuteExecutor(targetFilePath, input);
+                    executor = new JavaExecuteExecutor(targetFilePath, sample);
                 }
                 break;
             case "c++":
