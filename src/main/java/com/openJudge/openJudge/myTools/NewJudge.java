@@ -119,7 +119,16 @@ public class NewJudge {
         //将代码写入源文件
         FileUtil.writeToFile(code.getBytes(), sourceFilePath, BaseConstant.JAVA_SOURCE_FILE_NAME);
         Executor compileExecutor = ExecutorFactory.getInstance(type, BaseConstant.WHICH_STAGE_COMPILE, sourceFilePath, null, null);
-        Future<ExecutorResult> compileFuture = myExecuteTaskThreadPool.submit((Callable<ExecutorResult>) compileExecutor);
+        Future<ExecutorResult> compileFuture = null;
+        try {
+            compileFuture = myExecuteTaskThreadPool.submit((Callable<ExecutorResult>) compileExecutor);
+        } catch (RejectedExecutionException e) {
+            result.setState(BaseConstant.JUDGE_RESULT_STATE_SYSTEM_BUSY);
+            e.printStackTrace();
+            return result;
+        }
+
+//        Future<ExecutorResult> compileFuture = myExecuteTaskThreadPool.submit((Callable<ExecutorResult>) compileExecutor);
         ExecutorResult compilerResult = null;
         try {
             compilerResult = compileFuture.get();
